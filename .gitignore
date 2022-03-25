@@ -34,3 +34,5 @@ build/
 
 ### ignorar 
 src/main/resources/application.properties
+rtv-api.zip
+rtv-api.zip:Zone.Identifier
