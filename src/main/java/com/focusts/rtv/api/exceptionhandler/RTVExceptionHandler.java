@@ -5,9 +5,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -29,8 +31,7 @@ public class RTVExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
-            HttpHeaders headers, HttpStatus status, WebRequest request) {
-        
+            HttpHeaders headers, HttpStatus status, WebRequest request) {        
         String userMessage = messageSource.getMessage("mensagem.invalida", null, LocaleContextHolder.getLocale());
         String devMessage = Optional.ofNullable(ex.getCause()).orElse(ex).toString();
 
@@ -64,5 +65,13 @@ public class RTVExceptionHandler extends ResponseEntityExceptionHandler {
         List<RtvError> erros = Arrays.asList(new RtvError(userMessage, devMessage));
         return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
+
+    @ExceptionHandler({ DataIntegrityViolationException.class })
+    public ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest request){
+        String menagemUsuario = messageSource.getMessage("recurso.operacao-nao-permitida", null, LocaleContextHolder.getLocale());
+        String menagemDesenvolvedor = ExceptionUtils.getRootCauseMessage(ex);
+        List<RtvError> erros = Arrays.asList(new RtvError(menagemUsuario, menagemDesenvolvedor));
+        return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }    
 
 }
