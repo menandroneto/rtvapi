@@ -1,0 +1,8 @@
+COMMENT ON TABLE paramentros IS 'Tabela de Parametros';
+
+COMMENT ON COLUMN paramentros.codigo IS 'Codigo do Parametro';
+COMMENT ON COLUMN paramentros.cnpj IS 'CNPJ';
+COMMENT ON COLUMN paramentros.alicota IS 'Aliquota ISS';
+COMMENT ON COLUMN paramentros.codigomunicipio IS 'Insc Municipal';
+COMMENT ON COLUMN paramentros.inscricaomunicipal IS 'Insc Estadual';
+COMMENT ON COLUMN paramentros.valor_transporte IS 'Valor do Trasnporte Publico';
