@@ -30,7 +30,6 @@ public class RTVExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
             HttpHeaders headers, HttpStatus status, WebRequest request) {
-        
         String userMessage = messageSource.getMessage("mensagem.invalida", null, LocaleContextHolder.getLocale());
         String devMessage = Optional.ofNullable(ex.getCause()).orElse(ex).toString();
 
@@ -41,11 +40,11 @@ public class RTVExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
             HttpHeaders headers, HttpStatus status, WebRequest request) {
-        List<RtvError> errors = CreateListOfRtvError(ex.getBindingResult());
+        List<RtvError> errors = createListOfRtvError(ex.getBindingResult());
         return handleExceptionInternal(ex, errors, headers, HttpStatus.BAD_REQUEST, request);
     }
 
-    private List<RtvError> CreateListOfRtvError(BindingResult bindingResult){
+    private List<RtvError> createListOfRtvError(BindingResult bindingResult){
         List<RtvError> errors = new ArrayList<>();
 
         for (FieldError fieldError : bindingResult.getFieldErrors()){
@@ -59,7 +58,7 @@ public class RTVExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({ EmptyResultDataAccessException.class })
     public ResponseEntity<Object> handleEmptyResultDataAccessException(EmptyResultDataAccessException ex, WebRequest request){
-        String userMessage = messageSource.getMessage("recurso.noa-econtrado", null, LocaleContextHolder.getLocale());
+        String userMessage = messageSource.getMessage("recurso.nao-econtrado", null, LocaleContextHolder.getLocale());
         String devMessage = ex.toString();
         List<RtvError> erros = Arrays.asList(new RtvError(userMessage, devMessage));
         return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
