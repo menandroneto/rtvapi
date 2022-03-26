@@ -12,6 +12,7 @@ import com.focusts.rtv.api.repository.UserTypeRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -54,11 +55,11 @@ public class UserTypeResource {
     }
 
     @PutMapping("/{code}")
-    public ResponseEntity<UserType> update(@PathVariable Long code, @Valid @RequestBody UserType userType, HttpServletResponse response){
-        UserType userTypeGet = this.userTypeRepository.getById(code);
+    public ResponseEntity<UserType> update(@PathVariable Long code, @Valid @RequestBody UserType userType){
+        UserType userTypeGet = this.userTypeRepository.findById(code).orElseThrow(() -> new EmptyResultDataAccessException(1));
         BeanUtils.copyProperties(userType, userTypeGet, "id");
-        this.userTypeRepository.save(userType);
-        return ResponseEntity.status(HttpStatus.OK).body(userTypeGet);
+        this.userTypeRepository.save(userTypeGet);
+        return ResponseEntity.ok(userTypeGet);
     }
 
     @DeleteMapping("/{code}")
