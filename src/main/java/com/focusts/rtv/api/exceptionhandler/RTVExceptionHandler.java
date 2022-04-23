@@ -20,6 +20,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -60,7 +61,7 @@ public class RTVExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({ EmptyResultDataAccessException.class })
     public ResponseEntity<Object> handleEmptyResultDataAccessException(EmptyResultDataAccessException ex, WebRequest request){
-        String userMessage = messageSource.getMessage("recurso.noa-econtrado", null, LocaleContextHolder.getLocale());
+        String userMessage = messageSource.getMessage("recurso.nao-econtrado", null, LocaleContextHolder.getLocale());
         String devMessage = ex.toString();
         List<RtvError> erros = Arrays.asList(new RtvError(userMessage, devMessage));
         return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
