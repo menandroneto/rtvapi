@@ -62,13 +62,13 @@ public class User {
     private LocalDate endVacation;
     
     @Column(name = "stusuario")
-    private Boolean active;
+    private String active;
     
-    @Enumerated(EnumType.STRING)
+    // @Enumerated(EnumType.STRING)
     @Column(name = "sttptecnico")
-    private TechnicalType technicalType;
+    private String technicalType;
     
     @Column(name = "stfila")
-    private Boolean inQuee;
+    private String inQuee;
 
 }

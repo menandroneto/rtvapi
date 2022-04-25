@@ -7,10 +7,11 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum TechnicalType {
 
-    INTERN("Interno"),
-    EXTERN("Externo"),
-    NONE("Nenhum");
+    INTERN("I", "Interno"),
+    EXTERN("E", "Externo"),
+    NONE("N", "Nenhum");
 
+    private final String value;
     private final String description;
 
 }
