@@ -64,9 +64,9 @@ public class User {
     @Column(name = "stusuario")
     private String active;
     
-    // @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     @Column(name = "sttptecnico")
-    private String technicalType;
+    private TechnicalType technicalType;
     
     @Column(name = "stfila")
     private String inQuee;

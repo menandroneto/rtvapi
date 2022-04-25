@@ -7,9 +7,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum TechnicalType {
 
-    INTERN("I", "Interno"),
-    EXTERN("E", "Externo"),
-    NONE("N", "Nenhum");
+    I("I", "Interno"),
+    E("E", "Externo"),
+    N("N", "Não se Aplica");
 
     private final String value;
     private final String description;
