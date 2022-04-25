@@ -7,7 +7,7 @@ import javax.validation.Valid;
 
 import com.focusts.rtv.api.event.CreatedResourceEvent;
 import com.focusts.rtv.api.model.UserType;
-import com.focusts.rtv.api.repository.UserTypeRepository;
+import com.focusts.rtv.api.service.UserTypeService;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,43 +30,40 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserTypeResource {
     
     @Autowired
-    private UserTypeRepository userTypeRepository;
+    private ApplicationEventPublisher publisher;
 
     @Autowired
-    private ApplicationEventPublisher publisher;
+    private UserTypeService userTypeService;
 
     @GetMapping
     public List<UserType> list(){
-        return userTypeRepository.findAll();
+        return userTypeService.list();
     }
 
     @GetMapping("/{code}")
     public ResponseEntity<UserType> findById(@PathVariable Long code) {
-        return this.userTypeRepository.findById(code)
+        return this.userTypeService.findById(code)
             .map(userType -> ResponseEntity.ok(userType))
             .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
     public ResponseEntity<UserType> create(@Valid @RequestBody UserType userType, HttpServletResponse response){
-        UserType userTypeGet = this.userTypeRepository.save(userType);
+        UserType userTypeGet = this.userTypeService.create(userType);
         publisher.publishEvent(new CreatedResourceEvent(this, response, userTypeGet.getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(userTypeGet);
     }
 
     @PutMapping("/{code}")
     public ResponseEntity<UserType> update(@PathVariable Long code, @Valid @RequestBody UserType userType){
-        UserType userTypeGet = this.userTypeRepository.findById(code).orElseThrow(() -> new EmptyResultDataAccessException(1));
-        BeanUtils.copyProperties(userType, userTypeGet, "id");
-        this.userTypeRepository.save(userTypeGet);
-        return ResponseEntity.ok(userTypeGet);
+        UserType userTypeGet = this.userTypeService.update(code, userType);
+        return ResponseEntity.status(HttpStatus.OK).body(userTypeGet);
     }
 
     @DeleteMapping("/{code}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long code){
-        this.userTypeRepository.deleteById(code);
-    }
-
+    public void remove(@PathVariable Long code) {
+		this.userTypeService.delete(code);
+	}
 
 }

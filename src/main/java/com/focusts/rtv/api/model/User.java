@@ -17,6 +17,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 @Data
@@ -39,6 +41,10 @@ public class User {
     @Column(name = "nmusuario")
     private String name;
     
+    @JsonIgnore
+    @Column(name = "dssenha")
+    private String password;
+
     @Email
     @Column(name = "dsemail")
     private String email;
@@ -56,13 +62,13 @@ public class User {
     private LocalDate endVacation;
     
     @Column(name = "stusuario")
-    private Boolean active;
+    private String active;
     
     @Enumerated(EnumType.STRING)
     @Column(name = "sttptecnico")
     private TechnicalType technicalType;
     
     @Column(name = "stfila")
-    private Boolean inQuee;
+    private String inQuee;
 
 }
